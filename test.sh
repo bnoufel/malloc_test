@@ -23,6 +23,27 @@ make fclean -C ${MALLOC}
 compile_test
 
 #################################
+####### Test author file ########
+#################################
+echo -e -n "${BOLD}Author file: "
+if [[ -f ${MALLOC}/auteur ]]; then
+	if [[ -z $(diff -w <(cat ${MALLOC}/auteur) <(echo -e "${LOGNAME}\n")) ]]; then
+		test_is_ok
+	else
+		test_is_ko
+	fi
+elif [[ -f ${MALLOC}/author ]]; then
+	if [[ -z $(diff -w <(cat ${MALLOC}/author) <(echo  "${LOGNAME}")) ]]; then
+		test_is_ok
+	else
+		test_is_ko
+	fi
+else
+	test_is_ko
+fi
+echo
+
+#################################
 ######### Test Makefile #########
 #################################
 echo -e -n "${BOLD}Makefile: "
