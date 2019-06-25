@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-source ./include.sh
+source srcs/include.sh
 
 #################################
 ######## Remove Log File ########
@@ -97,6 +97,18 @@ echo -e "----------------------------------------------------"
 #################################
 echo -en ${BOLD}Advanced test: ${NORMAL}
 advenced_test
+if [[ ${arg} == "--debug" ]]; then
+	echo -e "${BOLD}1)${NORMAL}: ls"
+	echo -e "${BOLD}2)${NORMAL}: ls -l"
+	echo -e "${BOLD}3)${NORMAL}: ls -G"
+	echo -e "${BOLD}4)${NORMAL}: ls -lG"
+	echo -e "${BOLD}5)${NORMAL}: a_test0.c of the correction"
+	echo -e "${BOLD}6)${NORMAL}: a_test0b.c of the correction"
+	echo -e "${BOLD}7)${NORMAL}: a_test1.c of the correction"
+	echo -e "${BOLD}8)${NORMAL}: a_test2.c of the correction"
+	echo -e "${BOLD}9)${NORMAL}: a_test3.c of the correction"
+	echo -e "${BOLD}10)${NORMAL}: a_test4.c of the correction"
+fi
 echo "----------------------------------------------------"
 #################################
 ########## Bonus Test ###########

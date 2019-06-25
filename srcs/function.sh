@@ -69,34 +69,34 @@ test_is_ko() {
 }
 
 basic_test() {
-	./run.sh ${test0} 2>&- 1>&-
+	../run.sh ${test0} 2>&- 1>&-
 	print_error $?
-	./run.sh ${test1} 2>&- 1>&-
+	../run.sh ${test1} 2>&- 1>&-
 	print_error $?
-	./run.sh ${test2} 2>&- 1>&-
+	../run.sh ${test2} 2>&- 1>&-
 	print_error $?
-	res_test3=$(./run.sh ${test3} 2>&-)
+	res_test3=$(../run.sh ${test3} 2>&-)
 	print_error $?
 	if [[ -n $(diff <(echo ${res_test3}) <(./${test3})) ]]; then
 		test_is_ok
 	else
 		test_is_ko
 	fi
-	res_test3b=$(./run.sh ${test3b} 2>&-)
+	res_test3b=$(../run.sh ${test3b} 2>&-)
 	print_error $?
 	if [[ -n $(diff <(echo ${res_test3b}) <(./${test3b})) ]]; then
 		test_is_ok
 	else
 		test_is_ko
 	fi
-	res_test4=$(./run.sh ${test4} 2>&-)
+	res_test4=$(../run.sh ${test4} 2>&-)
 	print_error $?
 	if [[ -n "$(diff <(echo ${res_test4}) <(echo -e "Bonjour\n"))" ]]; then
 		test_is_ok
 	else
 		test_is_ko
 	fi
-	./run.sh ${test5} 2>&- 1>&-
+	../run.sh ${test5} 2>&- 1>&-
 	print_error $?
 	echo
 }
@@ -158,40 +158,40 @@ check_free() {
 }
 
 advenced_test() {
-	./run.sh ls 2>&- 1>&-
+	../run.sh ls 2>&- 1>&-
 	print_error $?
-	./run.sh ls -l 2>&- 1>&-
+	../run.sh ls -l 2>&- 1>&-
 	print_error $?
-	./run.sh ls -G 2>&- 1>&-
+	../run.sh ls -G 2>&- 1>&-
 	print_error $?
-	./run.sh ls -lG 2>&- 1>&-
+	../run.sh ls -lG 2>&- 1>&-
 	print_error $?
-	res_atest0=$(./run.sh ${a_test0} 2>&-)
+	res_atest0=$(../run.sh ${a_test0} 2>&-)
 	print_error $?
 	if [[ -z $(diff <(echo ${res_atest0}) <(echo -e "Malloc OK\nRealloc OK")) ]]; then
 		test_is_ok
 	fi
-	res_atest0b=$(./run.sh ${a_test0b} 2>&-)
+	res_atest0b=$(../run.sh ${a_test0b} 2>&-)
 	print_error $?
 	if [[ -z $(diff <(echo ${res_atest0b}) <(echo -e "Malloc OK\nRealloc OK")) ]]; then
 		test_is_ok
 	fi
-	res_atest1=$(./run.sh ${a_test1} 2>&-)
+	res_atest1=$(../run.sh ${a_test1} 2>&-)
 	print_error $?
 	if [[ -z $(diff <(echo ${res_atest1}) <(echo -e "Malloc OK\nRealloc OK")) ]]; then
 		test_is_ok
 	fi
-	res_atest2=$(./run.sh ${a_test2} 2>&-)
+	res_atest2=$(../run.sh ${a_test2} 2>&-)
 	print_error $?
 	if [[ -z $(diff <(echo ${res_atest2}) <(echo -e "Malloc OK")) ]]; then
 		test_is_ok
 	fi
-	res_atest3=$(./run.sh ${a_test3} 2>&-)
+	res_atest3=$(../run.sh ${a_test3} 2>&-)
 	print_error $?
 	if [[ -z $(diff <(echo ${res_atest3}) <(echo -e "Malloc OK\nRealloc OK")) ]]; then
 		test_is_ok
 	fi
-	res_atest4=$(./run.sh ${a_test4} 2>&-)
+	res_atest4=$(../run.sh ${a_test4} 2>&-)
 	print_error $?
 	if [[ -z $(diff <(echo ${res_atest4}) <(echo -e "Malloc OK")) ]]; then
 		test_is_ok
@@ -218,15 +218,13 @@ bonus_test() {
 		test_is_ko
 		echo
 	fi
+	echo -en "${BOLD}Thread safe: ${NORMAL}"
 	if [[ -n $(grep "pthread_mutex_lock" ${MALLOC}/**/*.c) ]]; then
-		echo -en "${BOLD}Thread safe: ${NORMAL}"
 		echo -n "This test may be long.... "
-		./run.sh gcc ${test0}.c -o bonjour 2>&- 1>&-
+		../run.sh gcc ${test0}.c -o bonjour 2>&- 1>&-
 		print_error $?
-		echo
 	else
-		echo -en "${BOLD}Thread safe: ${NORMAL}"
 		test_is_ko
-		echo
 	fi
+	echo
 }
