@@ -16,7 +16,7 @@ make -C ${MALLOC} >> ${LOGS}
 #################################
 cp ${MALLOC}/${SHORTNAME} .
 cp ${MALLOC}/${NAME} .
-make fclean -C ${MALLOC}
+make fclean -C ${MALLOC}  >> ${LOGS}
 #################################
 ######### Compile tests #########
 #################################
@@ -47,19 +47,30 @@ echo
 ######### Test Makefile #########
 #################################
 echo -e -n "${BOLD}Makefile: "
-make -C ${MALLOC} 1>2 2>&-
+make -C ${MALLOC} 2>&- >> ${LOGS}
 if [[ $? -eq 0 ]]; then
 	test_is_ok
 else
 	test_is_ko
 fi
-make fclean -C ${MALLOC} > /dev/null
+make fclean -C ${MALLOC}  2>&- >> ${LOGS}
 if [[ -f ${MALLOC}/${NAME} ]]; then
 	test_is_ko
 else
 	test_is_ok
 fi
-make -C ${MALLOC} > /dev/null
+make fclean -C ${MALLOC}  2>&- >> ${LOGS}
+export HOSTTYPE=trololo
+NEW_NAME=libft_malloc_${HOSTTYPE}.so
+make -C ${MALLOC} 2>&- >> ${LOGS}
+if [[ -f "${MALLOC}/${NEW_NAME}" ]];then
+	test_is_ok
+else
+	test_is_ko
+fi
+make fclean -C ${MALLOC}  2>&- >> ${LOGS}
+unset HOSTTYPE
+make -C ${MALLOC} 2>&- >> ${LOGS}
 if [[ $(make -C ${MALLOC}) == "make: Nothing to be done for \`all'." ]]; then
 	test_is_ok
 else
@@ -67,9 +78,10 @@ else
 fi
 echo
 if [[ ${arg} == "--debug" ]]; then
-	echo -e "${BOLD}First test${NORMAL}: Test ${NAME} rules"
-	echo -e "${BOLD}Second test${NORMAL}: Test fclean rules"
-	echo -e "${BOLD}Third test${NORMAL}: Test if Makefile relink"
+	echo -e "${BOLD}1)${NORMAL}: Test ${NAME} rules"
+	echo -e "${BOLD}2)${NORMAL}: Test fclean rules"
+	echo -e "${BOLD}3)${NORMAL}: Test HOSTTYPE"
+	echo -e "${BOLD}4)${NORMAL}: Test if Makefile relink"
 fi
 #################################
 ####### Get Page Reclaim ########
@@ -98,20 +110,28 @@ if [[ ${arg} == "--debug" ]]; then
 	echo -e "${BOLD}9)${NORMAL}: Check diff if output is good for test4.c"
 	echo -e "${BOLD}10)${NORMAL}: test5.c of the correction"
 fi
+echo -e "----------------------------------------------------"
 echo -e -n ${BOLD}Check page: ${NORMAL}
+j=0
 for i in {0..10}
 do
 	check_page
+	[ $? -eq 0 ] && let "j=j+1"
 	page_reclaims
 done
-echo -e "\n${BOLD}${GREEN}√ 5/5 - ${YELLOW}√ 4/5 - ${BLUE}√ 3/5 - ${CYAN}√ 2/5 - ${WHITE}√ 1/5 ${RED}x 0/5${NORMAL}"
+print_result ${j} 11
+echo -e "${BOLD}${GREEN}${SIGN_GOOD} 5/5 - ${YELLOW}${SIGN_GOOD} 4/5 - ${BLUE}${SIGN_GOOD} 3/5 - ${CYAN}${SIGN_GOOD} 2/5 - ${WHITE}${SIGN_GOOD} 1/5 ${RED}${SIGN_WRONG} 0/5${NORMAL}"
+echo -e "----------------------------------------------------"
+j=0
 echo -e -n ${BOLD}Check free: ${NORMAL}
 for i in {0..10}
 do
 	check_free
+	[ $? -eq 0 ] && let "j=j+1"
 	page_reclaims
 done
-echo -e "\n${BOLD}${GREEN}√ less than 3 pages - ${YELLOW}√ less than 5 pages - ${RED}x more to 5 pages${NORMAL}"
+print_result ${j} 11
+echo -e "${BOLD}${GREEN}${SIGN_GOOD} less than 3 pages - ${YELLOW}${SIGN_GOOD} less than 5 pages - ${RED}${SIGN_WRONG} more to 5 pages${NORMAL}"
 echo -e "----------------------------------------------------"
 #################################
 ######## Advanced Test ##########

@@ -6,6 +6,26 @@ delete_bin() {
 		rm -f tests/${file}
 	done
 }
+
+########################################
+###### $1 = Result
+###### $2 = nb max test
+########################################
+
+print_result() {
+	moyenne=$(($2/2))
+	quart=$(($2/4))
+	good=$((moyenne+quart))
+	echo
+	if [[ "$1" -gt "${good}" ]]; then
+		echo -e "${BOLD}Result${NORMAL}: ${GREEN}$1/$2${NORMAL}"
+	elif [[ "$1" -gt "${moyenne}" ]]; then
+		echo -e "${BOLD}Result${NORMAL}: ${YELLOW}$1/$2${NORMAL}"
+	else
+		echo -e "${BOLD}Result${NORMAL}: ${RED}$1/$2${NORMAL}"
+	fi
+}
+
 compile_test() {
 	delete_bin
 	gcc ${test0}.c -o ${test0}
@@ -60,7 +80,7 @@ test_is_ok() {
 	if [[ -z $1 ]]; then
 		echo -e -n "${BOLD}${GOOD} "
 	else
-		echo -e -n "${BOLD}$1√${NORMAL} "
+		echo -e -n "${BOLD}$1${SIGN_GOOD}${NORMAL} "
 	fi
 }
 
@@ -69,36 +89,47 @@ test_is_ko() {
 }
 
 basic_test() {
-	../run.sh ${test0} 2>&- 1>&-
+	i=0
+	./run.sh ${test0} 2>&- 1>&-
 	print_error $?
-	../run.sh ${test1} 2>&- 1>&-
+	[ $? -eq 0 ] && let "i=i+1"
+	./run.sh ${test1} 2>&- 1>&-
 	print_error $?
-	../run.sh ${test2} 2>&- 1>&-
+	[ $? -eq 0 ] && let "i=i+1"
+	./run.sh ${test2} 2>&- 1>&-
 	print_error $?
-	res_test3=$(../run.sh ${test3} 2>&-)
+	[ $? -eq 0 ] && let "i=i+1"
+	res_test3=$(./run.sh ${test3} 2>&-)
 	print_error $?
+	[ $? -eq 0 ] && let "i=i+1"
 	if [[ -n $(diff <(echo ${res_test3}) <(./${test3})) ]]; then
 		test_is_ok
+		let "i=i+1"
 	else
 		test_is_ko
 	fi
-	res_test3b=$(../run.sh ${test3b} 2>&-)
+	res_test3b=$(./run.sh ${test3b} 2>&-)
 	print_error $?
+	[ $? -eq 0 ] && let "i=i+1"
 	if [[ -n $(diff <(echo ${res_test3b}) <(./${test3b})) ]]; then
 		test_is_ok
+		let "i=i+1"
 	else
 		test_is_ko
 	fi
-	res_test4=$(../run.sh ${test4} 2>&-)
+	res_test4=$(./run.sh ${test4} 2>&-)
 	print_error $?
+	[ $? -eq 0 ] && let "i=i+1"
 	if [[ -n "$(diff <(echo ${res_test4}) <(echo -e "Bonjour\n"))" ]]; then
 		test_is_ok
+		let "i=i+1"
 	else
 		test_is_ko
 	fi
-	../run.sh ${test5} 2>&- 1>&-
+	./run.sh ${test5} 2>&- 1>&-
 	print_error $?
-	echo
+	[ $? -eq 0 ] && let "i=i+1"
+	print_result ${i} 10
 }
 
 check_page() {
@@ -111,6 +142,7 @@ check_page() {
 		if [[ ${arg} == "--debug" ]]; then
 			echo -en "${RED}($((${res_test1}-${res_test0})) - less than 255 pages)${NORMAL} "
 		fi
+		return 1
 	elif [[ ${diff} -ge 255 && ${diff} -le 272 ]]; then
 		test_is_ok
 		print_page 255 272 5 ${GREEN}
@@ -129,6 +161,7 @@ check_page() {
 			echo -en "${WHITE}($((${res_test1}-${res_test0})) - more to 1022 pages) (1/5)${NORMAL} "
 		fi
 	fi
+	return 0
 }
 
 check_free() {
@@ -138,6 +171,7 @@ check_free() {
 		if [[ ${arg} == "--debug" ]]; then
 			echo -en "${GREEN}($((${res_test2}-${res_test0})))${NORMAL} "
 		fi
+		return 0
 	elif [[ ${diff} -le 5 ]]; then
 		test_is_ok ${YELLOW}
 		echo "Free maybe fail !" >> ${LOGS}
@@ -146,6 +180,7 @@ check_free() {
 		if [[ ${arg} == "--debug" ]]; then
 			echo -en "${YELLOW}($((${res_test2}-${res_test0})))${NORMAL} "
 		fi
+		return 0
 	else
 		test_is_ko
 		echo "Free fail !" >> ${LOGS}
@@ -154,49 +189,89 @@ check_free() {
 		if [[ ${arg} == "--debug" ]]; then
 			echo -en "${RED}($((${res_test2}-${res_test0})))${NORMAL} "
 		fi
+		return 1
 	fi
 }
 
 advenced_test() {
-	../run.sh ls 2>&- 1>&-
+	i=0
+	./run.sh ls 2>&- 1>&-
+	err=$?
+	print_error ${err}
+	[ ${err} -eq 0 ] && let "i=i+1"
+	./run.sh ls -l 2>&- 1>&-
+	err=$?
+	print_error ${err}
+	[ ${err} -eq 0 ] && let "i=i+1"
+	./run.sh ls -G 2>&- 1>&-
+	err=$?
 	print_error $?
-	../run.sh ls -l 2>&- 1>&-
+	[ ${err} -eq 0 ] && let "i=i+1"
+	./run.sh ls -lG 2>&- 1>&-
+	err=$?
 	print_error $?
-	../run.sh ls -G 2>&- 1>&-
-	print_error $?
-	../run.sh ls -lG 2>&- 1>&-
-	print_error $?
-	res_atest0=$(../run.sh ${a_test0} 2>&-)
-	print_error $?
+	[ ${err} -eq 0 ] && let "i=i+1"
+	res_atest0=$(./run.sh ${a_test0} 2>&-)
+	err=$?
+	print_error ${err}
+	[ ${err} -eq 0 ] && let "i=i+1"
 	if [[ -z $(diff <(echo ${res_atest0}) <(echo -e "Malloc OK\nRealloc OK")) ]]; then
 		test_is_ok
+		let "i=i+1"
+	else
+		test_is_ko
 	fi
-	res_atest0b=$(../run.sh ${a_test0b} 2>&-)
-	print_error $?
+	res_atest0b=$(./run.sh ${a_test0b} 2>&-)
+	err=$?
+	print_error ${err}
+	[ ${err} -eq 0 ] && let "i=i+1"
 	if [[ -z $(diff <(echo ${res_atest0b}) <(echo -e "Malloc OK\nRealloc OK")) ]]; then
 		test_is_ok
+		let "i=i+1"
+	else
+		test_is_ko
 	fi
-	res_atest1=$(../run.sh ${a_test1} 2>&-)
-	print_error $?
+	res_atest1=$(./run.sh ${a_test1} 2>&-)
+	err=$?
+	print_error ${err}
+	[ ${err} -eq 0 ] && let "i=i+1"
 	if [[ -z $(diff <(echo ${res_atest1}) <(echo -e "Malloc OK\nRealloc OK")) ]]; then
 		test_is_ok
+		let "i=i+1"
+	else
+		test_is_ko
 	fi
-	res_atest2=$(../run.sh ${a_test2} 2>&-)
-	print_error $?
+	res_atest2=$(./run.sh ${a_test2} 2>&-)
+	err=$?
+	print_error ${err}
+	[ ${err} -eq 0 ] && let "i=i+1"
 	if [[ -z $(diff <(echo ${res_atest2}) <(echo -e "Malloc OK")) ]]; then
 		test_is_ok
+		let "i=i+1"
+	else
+		test_is_ko
 	fi
-	res_atest3=$(../run.sh ${a_test3} 2>&-)
-	print_error $?
+	res_atest3=$(./run.sh ${a_test3} 2>&-)
+	err=$?
+	print_error ${err}
+	[ ${err} -eq 0 ] && let "i=i+1"
 	if [[ -z $(diff <(echo ${res_atest3}) <(echo -e "Malloc OK\nRealloc OK")) ]]; then
 		test_is_ok
+		let "i=i+1"
+	else
+		test_is_ko
 	fi
-	res_atest4=$(../run.sh ${a_test4} 2>&-)
-	print_error $?
+	res_atest4=$(./run.sh ${a_test4} 2>&-)
+	err=$?
+	print_error ${err}
+	[ ${err} -eq 0 ] && let "i=i+1"
 	if [[ -z $(diff <(echo ${res_atest4}) <(echo -e "Malloc OK")) ]]; then
 		test_is_ok
+		let "i=i+1"
+	else
+		test_is_ko
 	fi
-	echo
+	print_result ${i} 16
 }
 
 bonus_test() {
