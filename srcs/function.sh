@@ -61,7 +61,7 @@ page_reclaims(){
 	res_test2=$(/usr/bin/time -l ./run.sh ${test2} 2>&1 | grep "page reclaims" | cut -dp -f 1 | tr -s ' ')
 }
 print_page() {
-	if [[ ${arg} = "--debug" ]]; then
+	if [[ ${debug} == "true" ]]; then
 		echo -en "$4($((${res_test1}-${res_test0})) - more to $1 pages and less than $2) ($3/5)${NORMAL} "
 	fi
 }
@@ -197,7 +197,7 @@ check_page() {
 		echo "Malloc fail !" >> ${LOGS}
 		echo -n "diff -U3 between test1 and test0: " >> ${LOGS}
 		echo $((${res_test1}-${res_test0})) >> ${LOGS}
-		if [[ ${arg} == "--debug" ]]; then
+		if [[ ${debug} == "true" ]]; then
 			echo -en "${RED}($((${res_test1}-${res_test0})) - less than 255 pages)${NORMAL} " > ${EXEC}/diff/check_page_$1
 		fi
 		return 1
@@ -215,7 +215,7 @@ check_page() {
 		echo $(print_page 513 1022 2 ${CYAN}) > ${EXEC}/diff/check_page_$1
 	elif [[ ${diff} -gt 1022 ]]; then
 		test_is_ok ${WHITE}
-		if [[ ${arg} == "--debug" ]]; then
+		if [[ ${debug} == "true" ]]; then
 			echo -en "${WHITE}($((${res_test1}-${res_test0})) - more to 1022 pages) (1/5)${NORMAL} " > ${EXEC}/diff/check_page_$1
 		fi
 	fi
@@ -245,7 +245,7 @@ check_free() {
 	fi
 }
 
-advenced_test() {
+advanced_test() {
 	i=0
 	########################
 	######## TEST 1 ########
@@ -253,46 +253,46 @@ advenced_test() {
 	./run.sh ls 2>&- 1>&-
 	err=$?
 	print_error ${err}
-	[[ ${err} -eq 0 ]] && let "i=i+1"; advenced_test_1=$(print_error ${err})
+	[[ ${err} -eq 0 ]] && let "i=i+1"; advanced_test_1=$(print_error ${err})
 	########################
 	######## TEST 2 ########
 	########################
 	./run.sh ls -l 2>&- 1>&-
 	err=$?
 	print_error ${err}
-	[[ ${err} -eq 0 ]] && let "i=i+1"; advenced_test_2=$(print_error ${err})
+	[[ ${err} -eq 0 ]] && let "i=i+1"; advanced_test_2=$(print_error ${err})
 	########################
 	######## TEST 3 ########
 	########################
 	./run.sh ls -G 2>&- 1>&-
 	err=$?
 	print_error ${err}
-	[[ ${err} -eq 0 ]] && let "i=i+1";advenced_test_3=$(print_error ${err})
+	[[ ${err} -eq 0 ]] && let "i=i+1";advanced_test_3=$(print_error ${err})
 	########################
 	######## TEST 4 ########
 	########################
 	./run.sh ls -lG 2>&- 1>&-
 	err=$?
 	print_error ${err}
-	[[ ${err} -eq 0 ]] && let "i=i+1"; advenced_test_4=$(print_error ${err})
+	[[ ${err} -eq 0 ]] && let "i=i+1"; advanced_test_4=$(print_error ${err})
 	########################
 	######## TEST 5 ########
 	########################
-	res_atest0=$(./run.sh ${a_test0} 2>&-)
+	res_atest0=$(${EXEC}/./run.sh ${a_test0} 2>&-)
 	err=$?
 	print_error ${err}
-	[[ ${err} -eq 0 ]] && let "i=i+1"; advenced_test_5=$(print_error ${err})
+	[[ ${err} -eq 0 ]] && let "i=i+1"; advanced_test_5=$(print_error ${err})
 	########################
 	######## TEST 6 ########
 	########################
 	if [[ -z $(diff -U3 -w <(echo ${res_atest0}) <(echo -e "Malloc OK Realloc OK")) ]]; then
 		test_is_ok
 		let "i=i+1"
-		advenced_test_6=${GOOD}
+		advanced_test_6=${GOOD}
 	else
 		test_is_ko
-		advenced_test_6=${WRONG}
-		diff -U3 -w <(echo ${res_atest0}) <(echo -e "Malloc OK Realloc OK") > ${EXEC}/diff/diff_advenced_test_6
+		advanced_test_6=${WRONG}
+		diff -U3 -w <(echo ${res_atest0}) <(echo -e "Malloc OK Realloc OK") > ${EXEC}/diff/diff_advanced_test_6
 	fi
 	########################
 	######## TEST 7 ########
@@ -300,19 +300,19 @@ advenced_test() {
 	res_atest0b=$(./run.sh ${a_test0b} 2>&-)
 	err=$?
 	print_error ${err}
-	[[ ${err} -eq 0 ]] && let "i=i+1"; advenced_test_7=$(print_error ${err})
+	[[ ${err} -eq 0 ]] && let "i=i+1"; advanced_test_7=$(print_error ${err})
 	########################
 	######## TEST 8 ########
 	########################
-	diff_advenced_test_8=$(diff -U3 -w <(echo ${res_atest0b}) <(echo -e "Malloc OK Realloc OK"))
-	if [[ -z $(echo ${diff_advenced_test_8}) ]]; then
+	diff_advanced_test_8=$(diff -U3 -w <(echo ${res_atest0b}) <(echo -e "Malloc OK Realloc OK"))
+	if [[ -z $(echo ${diff_advanced_test_8}) ]]; then
 		test_is_ok
 		let "i=i+1"
-		advenced_test_8=${GOOD}
+		advanced_test_8=${GOOD}
 	else
 		test_is_ko
-		advenced_test_8=${WRONG}
-		diff -U3 -w <(echo ${res_atest0b}) <(echo -e "Malloc OK Realloc OK") > ${EXEC}/diff/diff_advenced_test_8
+		advanced_test_8=${WRONG}
+		diff -U3 -w <(echo ${res_atest0b}) <(echo -e "Malloc OK Realloc OK") > ${EXEC}/diff/diff_advanced_test_8
 	fi
 	########################
 	######## TEST 9 ########
@@ -320,19 +320,19 @@ advenced_test() {
 	res_atest1=$(./run.sh ${a_test1} 2>&-)
 	err=$?
 	print_error ${err}
-	[[ ${err} -eq 0 ]] && let "i=i+1"; advenced_test_9=$(print_error ${err})
+	[[ ${err} -eq 0 ]] && let "i=i+1"; advanced_test_9=$(print_error ${err})
 	########################
 	######## TEST 10 #######
 	########################
-	diff_advenced_test_10=$(diff -U3 -w <(echo ${res_atest1}) <(echo -e "Malloc OK Realloc OK"))
-	if [[ -z $(echo ${diff_advenced_test_10}) ]]; then
+	diff_advanced_test_10=$(diff -U3 -w <(echo ${res_atest1}) <(echo -e "Malloc OK Realloc OK"))
+	if [[ -z $(echo ${diff_advanced_test_10}) ]]; then
 		test_is_ok
 		let "i=i+1"
-		advenced_test_10=${GOOD}
+		advanced_test_10=${GOOD}
 	else
 		test_is_ko
-		advenced_test_10=${WRONG}
-		diff -U3 -w <(echo ${res_atest1}) <(echo -e "Malloc OK Realloc OK") > ${EXEC}/diff/diff_advenced_test_10
+		advanced_test_10=${WRONG}
+		diff -U3 -w <(echo ${res_atest1}) <(echo -e "Malloc OK Realloc OK") > ${EXEC}/diff/diff_advanced_test_10
 	fi
 	########################
 	######## TEST 11 #######
@@ -340,18 +340,18 @@ advenced_test() {
 	res_atest2=$(./run.sh ${a_test2} 2>&-)
 	err=$?
 	print_error ${err}
-	[[ ${err} -eq 0 ]] && let "i=i+1"; advenced_test_11=$(print_error ${err})
+	[[ ${err} -eq 0 ]] && let "i=i+1"; advanced_test_11=$(print_error ${err})
 	########################
 	######## TEST 12 #######
 	########################
 	if [[ -z $(diff -U3 <(echo ${res_atest2}) <(echo -e "Malloc OK")) ]]; then
 		test_is_ok
 		let "i=i+1"
-		advenced_test_12=${GOOD}
+		advanced_test_12=${GOOD}
 	else
 		test_is_ko
-		advenced_test_12=${WRONG}
-		diff -U3 <(echo ${res_atest2}) <(echo -e "Malloc OK") > ${EXEC}/diff/diff_advenced_test_12
+		advanced_test_12=${WRONG}
+		diff -U3 <(echo ${res_atest2}) <(echo -e "Malloc OK") > ${EXEC}/diff/diff_advanced_test_12
 	fi
 	########################
 	######## TEST 13 #######
@@ -359,18 +359,18 @@ advenced_test() {
 	res_atest3=$(./run.sh ${a_test3} 2>&-)
 	err=$?
 	print_error ${err}
-	[[ ${err} -eq 0 ]] && let "i=i+1"; advenced_test_13=$(print_error ${err})
+	[[ ${err} -eq 0 ]] && let "i=i+1"; advanced_test_13=$(print_error ${err})
 	########################
 	######## TEST 14 #######
 	########################
 	if [[ -z $(diff -U3 -w <(echo ${res_atest3}) <(echo -e "Malloc OK Realloc OK")) ]]; then
 		test_is_ok
 		let "i=i+1"
-		advenced_test_14=${GOOD}
+		advanced_test_14=${GOOD}
 	else
 		test_is_ko
-		advenced_test_14=${WRONG}
-		diff -U3 -w <(echo ${res_atest3}) <(echo -e "Malloc OK Realloc OK") > ${EXEC}/diff/diff_advenced_test_14
+		advanced_test_14=${WRONG}
+		diff -U3 -w <(echo ${res_atest3}) <(echo -e "Malloc OK Realloc OK") > ${EXEC}/diff/diff_advanced_test_14
 	fi
 	########################
 	######## TEST 15 #######
@@ -378,21 +378,21 @@ advenced_test() {
 	res_atest4=$(./run.sh ${a_test4} 2>&-)
 	err=$?
 	print_error ${err}
-	[[ ${err} -eq 0 ]] && let "i=i+1"; advenced_test_15=$(print_error ${err})
+	[[ ${err} -eq 0 ]] && let "i=i+1"; advanced_test_15=$(print_error ${err})
 	########################
 	######## TEST 16 #######
 	########################
 	if [[ -z $(diff -U3 -w <(echo ${res_atest4}) <(echo -e "Malloc OK")) ]] || [[ -z $(diff -U3 -w <(echo ${res_atest4}) <(echo -e "Malloc OK Realloc OK")) ]]; then
 		test_is_ok
 		let "i=i+1"
-		advenced_test_16=${GOOD}
+		advanced_test_16=${GOOD}
 	else
 		test_is_ko
-		advenced_test_16=${WRONG}
+		advanced_test_16=${WRONG}
 		if [[ -z $(diff -U3 -w <(echo ${res_atest4}) <(echo -e "Malloc OK Realloc OK")) ]]; then
-			diff -U3 -w <(echo ${res_atest4}) <(echo -e "Malloc OK Realloc OK") > ${EXEC}/diff/diff_advenced_test_16
+			diff -U3 -w <(echo ${res_atest4}) <(echo -e "Malloc OK Realloc OK") > ${EXEC}/diff/diff_advanced_test_16
 		elif [[ -z $(diff -U3 -w <(echo ${res_atest4}) <(echo -e "Malloc OK")) ]]; then
-			diff -U3 -w <(echo ${res_atest4}) <(echo -e "Malloc OK") > ${EXEC}/diff/diff_advenced_test_16
+			diff -U3 -w <(echo ${res_atest4}) <(echo -e "Malloc OK") > ${EXEC}/diff/diff_advanced_test_16
 		fi
 	fi
 	print_result ${i} 16

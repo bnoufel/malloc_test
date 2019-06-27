@@ -10,7 +10,7 @@ test_author() {
 			test_is_ok
 	else
 		test_is_ko
-		if [[ ${arg} == "--debug" ]]; then
+		if [[ ${debug} == "true" ]]; then
 			echo
 			if [[ -f ${MALLOC}/auteur ]]; then
 				diff -U3 -w <(cat ${MALLOC}/auteur) <(echo "${LOGNAME}")
@@ -21,7 +21,7 @@ test_author() {
 			fi
 		fi
 	fi
-	if [[ ${arg} == "--debug" ]]; then
+	if [[ ${debug} == "true" ]]; then
 		echo -e "----------------------------------------------------"
 	else
 		echo -e "\n----------------------------------------------------"
@@ -64,7 +64,7 @@ test_makefile() {
 	unset HOSTTYPE
 	make -C ${MALLOC} 2>> ${LOGS} >> ${LOGS}
 	echo
-	if [[ ${arg} == "--debug" ]]; then
+	if [[ ${debug} == "true" ]]; then
 		echo -e "${BOLD}1)${NORMAL}: Test ${NAME} rules ${makefile_1}"
 		echo -e "${BOLD}2)${NORMAL}: Test fclean rules ${makefile_2}"
 		echo -e "${BOLD}3)${NORMAL}: Test HOSTTYPE ${makefile_3}"
@@ -78,9 +78,14 @@ test_makefile() {
 ########## Check Free ###########
 #################################
 test_basic() {
+	#################################
+	####### Get Page Reclaim ########
+	#################################
+	page_reclaims
+	echo "----------------------------------------------------"
 	echo -e -n ${BOLD}Basic test: ${NORMAL}
 	basic_test
-	if [[ ${arg} == "--debug" ]]; then
+	if [[ ${debug} == "true" ]]; then
 		echo -e "${BOLD}1)${NORMAL}: test0.c of the correction ${basic_test_1}"
 		echo -e "${BOLD}2)${NORMAL}: test1.c of the correction ${basic_test_2}"
 		echo -e "${BOLD}3)${NORMAL}: test2.c of the correction ${basic_test_3}"
@@ -106,7 +111,7 @@ test_basic() {
 	done
 	print_result ${j} 11
 	echo -e "${BOLD}${GREEN}${SIGN_GOOD} 5/5 - ${YELLOW}${SIGN_GOOD} 4/5 - ${BLUE}${SIGN_GOOD} 3/5 - ${CYAN}${SIGN_GOOD} 2/5 - ${WHITE}${SIGN_GOOD} 1/5 ${RED}${SIGN_WRONG} 0/5${NORMAL}"
-	if [[ ${arg} == "--debug" ]]; then
+	if [[ ${debug} == "true" ]]; then
 		for i in {1..11}
 		do
 			if [[ -f ${EXEC}/diff/check_page_$((i-1)) ]]; then
@@ -125,7 +130,7 @@ test_basic() {
 	done
 	print_result ${j} 11
 	echo -e "${BOLD}${GREEN}${SIGN_GOOD} less than 3 pages - ${YELLOW}${SIGN_GOOD} less than 5 pages - ${RED}${SIGN_WRONG} more to 5 pages${NORMAL}"
-	if [[ ${arg} == "--debug" ]]; then
+	if [[ ${debug} == "true" ]]; then
 		for i in {1..11}
 		do
 			if [[ -f "${EXEC}/diff/check_free_$((i-1))" ]]; then
@@ -139,31 +144,31 @@ test_basic() {
 #################################
 ######## Advanced Test ##########
 #################################
-test_advenced () {
+test_advanced () {
 	echo -en ${BOLD}Advanced test: ${NORMAL}
-	advenced_test
-	if [[ ${arg} == "--debug" ]]; then
-		echo -e "${BOLD}1)${NORMAL}: ls ${advenced_test_1}"
-		echo -e "${BOLD}2)${NORMAL}: ls -l ${advenced_test_2}"
-		echo -e "${BOLD}3)${NORMAL}: ls -G ${advenced_test_3}"
-		echo -e "${BOLD}4)${NORMAL}: ls -lG ${advenced_test_4}"
-		echo -e "${BOLD}5)${NORMAL}: run a_test0.c just test a basic realloc ${advenced_test_5}"
-		echo -e "${BOLD}6)${NORMAL}: check diff with output to a_test0 and normally output ${advenced_test_6}"
-		echo -e "${BOLD}7)${NORMAL}: run a_test0b.c just test malloc and realloc with size = 0 ${advenced_test_7}"
-		echo -e "${BOLD}8)${NORMAL}: check diff with output to a_test0b and normally output ${advenced_test_8}"
-		[[ -f ${EXEC}/diff/diff_advenced_test_8 ]] && cat -e ${EXEC}/diff/diff_advenced_test_8
-		echo -e "${BOLD}9)${NORMAL}: run a_test1.c just test malloc and realloc with a smaller size ${advenced_test_9}"
-		echo -e "${BOLD}10)${NORMAL}: check diff with output to a_test1 and normally output ${advenced_test_10}"
-		[[ -f ${EXEC}/diff/diff_advenced_test_10 ]] && cat -e ${EXEC}/diff/diff_advenced_test_10
-		echo -e "${BOLD}11)${NORMAL}: run a_test2.c just test malloc and realloc with a wrong ptr ${advenced_test_11}"
-		echo -e "${BOLD}12)${NORMAL}: check diff with output to a_test2 and normally output ${advenced_test_12}"
-		[[ -f ${EXEC}/diff/diff_advenced_test_12 ]] && cat -e ${EXEC}/diff/diff_advenced_test_12
-		echo -e "${BOLD}13)${NORMAL}: run a_test3.c just test malloc and realloc with a ptr at NULL ${advenced_test_13}"
-		echo -e "${BOLD}14)${NORMAL}: check diff with output to a_test3 and normally output ${advenced_test_14}"
-		[[ -f ${EXEC}/diff/diff_advenced_test_14 ]] && cat -e ${EXEC}/diff/diff_advenced_test_14
-		echo -e "${BOLD}15)${NORMAL}: run a_test4c.c just test malloc and realloc with a BIG size (ULONG_MAX) ${advenced_test_15}"
-		echo -e "${BOLD}16)${NORMAL}: check diff with output to a_test4 and normally output ${advenced_test_16}"
-		[[ -f ${EXEC}/diff/diff_advenced_test_16 ]] && cat -e ${EXEC}/diff/diff_advenced_test_16
+	advanced_test
+	if [[ ${debug} == "true" ]]; then
+		echo -e "${BOLD}1)${NORMAL}: ls ${advanced_test_1}"
+		echo -e "${BOLD}2)${NORMAL}: ls -l ${advanced_test_2}"
+		echo -e "${BOLD}3)${NORMAL}: ls -G ${advanced_test_3}"
+		echo -e "${BOLD}4)${NORMAL}: ls -lG ${advanced_test_4}"
+		echo -e "${BOLD}5)${NORMAL}: run a_test0.c just test a basic realloc ${advanced_test_5}"
+		echo -e "${BOLD}6)${NORMAL}: check diff with output to a_test0 and normally output ${advanced_test_6}"
+		echo -e "${BOLD}7)${NORMAL}: run a_test0b.c just test malloc and realloc with size = 0 ${advanced_test_7}"
+		echo -e "${BOLD}8)${NORMAL}: check diff with output to a_test0b and normally output ${advanced_test_8}"
+		[[ -f ${EXEC}/diff/diff_advanced_test_8 ]] && cat -e ${EXEC}/diff/diff_advanced_test_8
+		echo -e "${BOLD}9)${NORMAL}: run a_test1.c just test malloc and realloc with a smaller size ${advanced_test_9}"
+		echo -e "${BOLD}10)${NORMAL}: check diff with output to a_test1 and normally output ${advanced_test_10}"
+		[[ -f ${EXEC}/diff/diff_advanced_test_10 ]] && cat -e ${EXEC}/diff/diff_advanced_test_10
+		echo -e "${BOLD}11)${NORMAL}: run a_test2.c just test malloc and realloc with a wrong ptr ${advanced_test_11}"
+		echo -e "${BOLD}12)${NORMAL}: check diff with output to a_test2 and normally output ${advanced_test_12}"
+		[[ -f ${EXEC}/diff/diff_advanced_test_12 ]] && cat -e ${EXEC}/diff/diff_advanced_test_12
+		echo -e "${BOLD}13)${NORMAL}: run a_test3.c just test malloc and realloc with a ptr at NULL ${advanced_test_13}"
+		echo -e "${BOLD}14)${NORMAL}: check diff with output to a_test3 and normally output ${advanced_test_14}"
+		[[ -f ${EXEC}/diff/diff_advanced_test_14 ]] && cat -e ${EXEC}/diff/diff_advanced_test_14
+		echo -e "${BOLD}15)${NORMAL}: run a_test4c.c just test malloc and realloc with a BIG size (ULONG_MAX) ${advanced_test_15}"
+		echo -e "${BOLD}16)${NORMAL}: check diff with output to a_test4 and normally output ${advanced_test_16}"
+		[[ -f ${EXEC}/diff/diff_advanced_test_16 ]] && cat -e ${EXEC}/diff/diff_advanced_test_16
 	fi
 	echo "----------------------------------------------------"
 }
@@ -175,4 +180,13 @@ test_bonus() {
 	echo -e ${BOLD}Bonus test: ${NORMAL}
 	bonus_test
 	echo "----------------------------------------------------"
+}
+
+
+test_all() {
+	test_author
+	test_makefile
+	test_basic
+	test_advanced
+	test_bonus
 }

@@ -1,5 +1,13 @@
 #!/usr/bin/env bash
 unset HOSTTYPE
+all="false"
+debug="false"
+author=false
+makefile=false
+basic=false
+advanced=false
+bonus=false
+help=false
 EXEC=`pwd`
 BOLD="\033[1m"
 YELLOW="\033[33m"
