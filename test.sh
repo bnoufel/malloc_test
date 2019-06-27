@@ -16,7 +16,7 @@ test_makefile
 page_reclaims
 echo "----------------------------------------------------"
 test_basic
-test_advence
+test_advenced
 test_bonus
 #################################
 ############ Legend #############

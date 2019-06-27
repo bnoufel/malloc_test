@@ -5,6 +5,7 @@ delete_bin() {
 	do
 		rm -f tests/${file}
 	done
+	rm -f ${EXEC}/diff/*
 }
 
 ########################################
@@ -132,13 +133,14 @@ basic_test() {
 	########################
 	######## TEST 5 ########
 	########################
-	if [[ -n $(diff <(echo ${res_test3}) <(./${test3})) ]]; then
+	if [[ -z $(diff -w <(./run.sh ${test3} 2>&-) <(./${test3})) ]]; then
 		test_is_ok
 		let "i=i+1"
 		basic_test_5=${GOOD}
 	else
 		test_is_ko
 		basic_test_5=${WRONG}
+		diff -U3 <(./run.sh ${test3} 2>&-) <(./${test3}) > ${EXEC}/diff/diff_basic_test_5
 	fi
 	########################
 	######## TEST 6 ########
@@ -150,13 +152,14 @@ basic_test() {
 	########################
 	######## TEST 7 ########
 	########################
-	if [[ -n $(diff <(echo ${res_test3b}) <(./${test3b})) ]]; then
+	if [[ -z $(diff -w  <(./run.sh ${test3b} 2>&-) <(./${test3b})) ]]; then
 		test_is_ok
 		let "i=i+1"
 		basic_test_7=${GOOD}
 	else
 		test_is_ko
 		basic_test_7=${WRONG}
+		diff -U3 <(./run.sh ${test3b} 2>&-) <(./${test3b}) > ${EXEC}/diff/diff_basic_test_7
 	fi
 	########################
 	######## TEST 8 ########
@@ -168,13 +171,14 @@ basic_test() {
 	########################
 	######## TEST 9 ########
 	########################
-	if [[ -n "$(diff <(echo ${res_test4}) <(echo -e "Bonjour\n"))" ]]; then
+	if [[ -z $(diff -w <(echo ${res_test4}) <(echo -e "Bonjours")) ]]; then
 		test_is_ok
 		let "i=i+1"
 		basic_test_9=${GOOD}
 	else
 		test_is_ko
 		basic_test_9=${WRONG}
+		diff -U3 <(echo ${res_test4}) <(echo -e "Bonjours") > ${EXEC}/diff/diff_basic_test_9
 	fi
 	########################
 	######## TEST 10 #######
@@ -191,28 +195,28 @@ check_page() {
 	if [[ ${diff} -lt 255 ]]; then
 		test_is_ko
 		echo "Malloc fail !" >> ${LOGS}
-		echo -n "Diff between test1 and test0: " >> ${LOGS}
+		echo -n "diff -U3 between test1 and test0: " >> ${LOGS}
 		echo $((${res_test1}-${res_test0})) >> ${LOGS}
 		if [[ ${arg} == "--debug" ]]; then
-			echo -en "${RED}($((${res_test1}-${res_test0})) - less than 255 pages)${NORMAL} "
+			echo -en "${RED}($((${res_test1}-${res_test0})) - less than 255 pages)${NORMAL} " > ${EXEC}/diff/check_page_$1
 		fi
 		return 1
 	elif [[ ${diff} -ge 255 && ${diff} -le 272 ]]; then
 		test_is_ok
-		print_page 255 272 5 ${GREEN}
+		echo $(print_page 255 272 5 ${GREEN}) > ${EXEC}/diff/check_page_$1
 	elif [[ ${diff} -gt 272 && ${diff} -le 312 ]]; then
 		test_is_ok ${YELLOW}
-		print_page 273 312 4 ${YELLOW}
+		echo $(print_page 273 312 4 ${YELLOW}) > ${EXEC}/diff/check_page_$1
 	elif [[ ${diff} -gt 312 && ${diff} -le 512 ]]; then
 		test_is_ok ${BLUE}
-		print_page 313 512 3 ${BLUE}
+		echo $(print_page 313 512 3 ${BLUE}) > ${EXEC}/diff/check_page_$1
 	elif [[ ${diff} -gt 512 && ${diff} -le 1022 ]]; then
 		test_is_ok ${CYAN}
-		print_page 513 1022 2 ${CYAN}
+		echo $(print_page 513 1022 2 ${CYAN}) > ${EXEC}/diff/check_page_$1
 	elif [[ ${diff} -gt 1022 ]]; then
 		test_is_ok ${WHITE}
 		if [[ ${arg} == "--debug" ]]; then
-			echo -en "${WHITE}($((${res_test1}-${res_test0})) - more to 1022 pages) (1/5)${NORMAL} "
+			echo -en "${WHITE}($((${res_test1}-${res_test0})) - more to 1022 pages) (1/5)${NORMAL} " > ${EXEC}/diff/check_page_$1
 		fi
 	fi
 	return 0
@@ -222,27 +226,21 @@ check_free() {
 	diff=$((${res_test2}-${res_test0}))
 	if [[ ${diff} -le 3 ]]; then
 		test_is_ok
-		if [[ ${arg} == "--debug" ]]; then
-			echo -en "${GREEN}($((${res_test2}-${res_test0})))${NORMAL} "
-		fi
+		echo -en "Diff between test2.c and test0.c : ${GREEN}$((${res_test2}-${res_test0}))${NORMAL} " > ${EXEC}/diff/check_free_$1
 		return 0
 	elif [[ ${diff} -le 5 ]]; then
 		test_is_ok ${YELLOW}
 		echo "Free maybe fail !" >> ${LOGS}
-		echo -n "Diff between test2 and test0: " >> ${LOGS}
+		echo -n "diff -U3 between test2 and test0: " >> ${LOGS}
 		echo $((${res_test2}-${res_test0})) >> ${LOGS}
-		if [[ ${arg} == "--debug" ]]; then
-			echo -en "${YELLOW}($((${res_test2}-${res_test0})))${NORMAL} "
-		fi
+		echo -en "Diff between test2.c and test0.c : ${YELLOW}$((${res_test2}-${res_test0}))${NORMAL} "  > ${EXEC}/diff/check_free_$1
 		return 0
 	else
 		test_is_ko
 		echo "Free fail !" >> ${LOGS}
-		echo -n "Diff between test2 and test0: " >> ${LOGS}
+		echo -n "diff -U3 between test2 and test0: " >> ${LOGS}
 		echo $((${res_test2}-${res_test0})) >> ${LOGS}
-		if [[ ${arg} == "--debug" ]]; then
-			echo -en "${RED}($((${res_test2}-${res_test0})))${NORMAL} "
-		fi
+		echo -en "Diff between test2.c and test0.c : ${RED}$((${res_test2}-${res_test0}))${NORMAL} "  > ${EXEC}/diff/check_free_$1
 		return 1
 	fi
 }
@@ -287,13 +285,14 @@ advenced_test() {
 	########################
 	######## TEST 6 ########
 	########################
-	if [[ -z $(diff -w <(echo ${res_atest0}) <(echo -e "Malloc OK Realloc OK")) ]]; then
+	if [[ -z $(diff -U3 -w <(echo ${res_atest0}) <(echo -e "Malloc OK Realloc OK")) ]]; then
 		test_is_ok
 		let "i=i+1"
 		advenced_test_6=${GOOD}
 	else
 		test_is_ko
 		advenced_test_6=${WRONG}
+		diff -U3 -w <(echo ${res_atest0}) <(echo -e "Malloc OK Realloc OK") > ${EXEC}/diff/diff_advenced_test_6
 	fi
 	########################
 	######## TEST 7 ########
@@ -305,14 +304,15 @@ advenced_test() {
 	########################
 	######## TEST 8 ########
 	########################
-	if [[ -z $(diff -w <(echo ${res_atest0b}) <(echo -e "Malloc OK Realloc OK")) ]]; then
+	diff_advenced_test_8=$(diff -U3 -w <(echo ${res_atest0b}) <(echo -e "Malloc OK Realloc OK"))
+	if [[ -z $(echo ${diff_advenced_test_8}) ]]; then
 		test_is_ok
 		let "i=i+1"
 		advenced_test_8=${GOOD}
 	else
 		test_is_ko
 		advenced_test_8=${WRONG}
-		diff -w <(echo ${res_atest0b}) <(echo -e "Malloc OK Realloc OK") > ${EXEC}/diff/diff_advenced_test_8
+		diff -U3 -w <(echo ${res_atest0b}) <(echo -e "Malloc OK Realloc OK") > ${EXEC}/diff/diff_advenced_test_8
 	fi
 	########################
 	######## TEST 9 ########
@@ -324,14 +324,15 @@ advenced_test() {
 	########################
 	######## TEST 10 #######
 	########################
-	if [[ -z $(diff -w <(echo ${res_atest1}) <(echo -e "Malloc OK Realloc OK")) ]]; then
+	diff_advenced_test_10=$(diff -U3 -w <(echo ${res_atest1}) <(echo -e "Malloc OK Realloc OK"))
+	if [[ -z $(echo ${diff_advenced_test_10}) ]]; then
 		test_is_ok
 		let "i=i+1"
 		advenced_test_10=${GOOD}
 	else
 		test_is_ko
 		advenced_test_10=${WRONG}
-		diff <(echo ${res_atest1}) <(echo -e "Malloc OK Realloc OK") > ${EXEC}/diff/diff_advenced_test_10
+		diff -U3 -w <(echo ${res_atest1}) <(echo -e "Malloc OK Realloc OK") > ${EXEC}/diff/diff_advenced_test_10
 	fi
 	########################
 	######## TEST 11 #######
@@ -343,13 +344,14 @@ advenced_test() {
 	########################
 	######## TEST 12 #######
 	########################
-	if [[ -z $(diff <(echo ${res_atest2}) <(echo -e "Malloc OK")) ]]; then
+	if [[ -z $(diff -U3 <(echo ${res_atest2}) <(echo -e "Malloc OK")) ]]; then
 		test_is_ok
 		let "i=i+1"
 		advenced_test_12=${GOOD}
 	else
 		test_is_ko
 		advenced_test_12=${WRONG}
+		diff -U3 <(echo ${res_atest2}) <(echo -e "Malloc OK") > ${EXEC}/diff/diff_advenced_test_12
 	fi
 	########################
 	######## TEST 13 #######
@@ -361,13 +363,14 @@ advenced_test() {
 	########################
 	######## TEST 14 #######
 	########################
-	if [[ -z $(diff -w <(echo ${res_atest3}) <(echo -e "Malloc OK Realloc OK")) ]]; then
+	if [[ -z $(diff -U3 -w <(echo ${res_atest3}) <(echo -e "Malloc OK Realloc OK")) ]]; then
 		test_is_ok
 		let "i=i+1"
 		advenced_test_14=${GOOD}
 	else
 		test_is_ko
 		advenced_test_14=${WRONG}
+		diff -U3 -w <(echo ${res_atest3}) <(echo -e "Malloc OK Realloc OK") > ${EXEC}/diff/diff_advenced_test_14
 	fi
 	########################
 	######## TEST 15 #######
@@ -379,13 +382,18 @@ advenced_test() {
 	########################
 	######## TEST 16 #######
 	########################
-	if [[ -z $(diff -w <(echo ${res_atest4}) <(echo -e "Malloc OK")) ]] || [[ -z $(diff -w <(echo ${res_atest4}) <(echo -e "Malloc OK Realloc OK")) ]]; then
+	if [[ -z $(diff -U3 -w <(echo ${res_atest4}) <(echo -e "Malloc OK")) ]] || [[ -z $(diff -U3 -w <(echo ${res_atest4}) <(echo -e "Malloc OK Realloc OK")) ]]; then
 		test_is_ok
 		let "i=i+1"
 		advenced_test_16=${GOOD}
 	else
 		test_is_ko
 		advenced_test_16=${WRONG}
+		if [[ -z $(diff -U3 -w <(echo ${res_atest4}) <(echo -e "Malloc OK Realloc OK")) ]]; then
+			diff -U3 -w <(echo ${res_atest4}) <(echo -e "Malloc OK Realloc OK") > ${EXEC}/diff/diff_advenced_test_16
+		elif [[ -z $(diff -U3 -w <(echo ${res_atest4}) <(echo -e "Malloc OK")) ]]; then
+			diff -U3 -w <(echo ${res_atest4}) <(echo -e "Malloc OK") > ${EXEC}/diff/diff_advenced_test_16
+		fi
 	fi
 	print_result ${i} 16
 }
