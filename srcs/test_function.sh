@@ -86,13 +86,13 @@ test_basic() {
 		echo -e "${BOLD}3)${NORMAL}: test2.c of the correction ${basic_test_3}"
 		echo -e "${BOLD}4)${NORMAL}: test3.c of the correction ${basic_test_4}"
 		echo -e "${BOLD}5)${NORMAL}: Check diff if output is good for test3.c ${basic_test_5}"
-		[ -f ${EXEC}/diff/diff_basic_test_5 ] && cat -e ${EXEC}/diff/diff_basic_test_5
+		[[ -f ${EXEC}/diff/diff_basic_test_5 ]] && cat -e ${EXEC}/diff/diff_basic_test_5
 		echo -e "${BOLD}6)${NORMAL}: test3++.c of the correction ${basic_test_6}"
 		echo -e "${BOLD}7)${NORMAL}: Check diff if output is good for test3++.c ${basic_test_7}"
-		[ -f ${EXEC}/diff/diff_basic_test_7 ] && cat -e ${EXEC}/diff/diff_basic_test_7
+		[[ -f ${EXEC}/diff/diff_basic_test_7 ]] && cat -e ${EXEC}/diff/diff_basic_test_7
 		echo -e "${BOLD}8)${NORMAL}: test4.c of the correction ${basic_test_8}"
 		echo -e "${BOLD}9)${NORMAL}: Check diff if output is good for test4.c ${basic_test_9}"
-		[ -f ${EXEC}/diff/diff_basic_test_9 ] && cat -e ${EXEC}/diff/diff_basic_test_9
+		[[ -f ${EXEC}/diff/diff_basic_test_9 ]] && cat -e ${EXEC}/diff/diff_basic_test_9
 		echo -e "${BOLD}10)${NORMAL}: test5.c of the correction ${basic_test_10}"
 	fi
 	echo -e "----------------------------------------------------"
@@ -151,19 +151,19 @@ test_advenced () {
 		echo -e "${BOLD}6)${NORMAL}: check diff with output to a_test0 and normally output ${advenced_test_6}"
 		echo -e "${BOLD}7)${NORMAL}: run a_test0b.c just test malloc and realloc with size = 0 ${advenced_test_7}"
 		echo -e "${BOLD}8)${NORMAL}: check diff with output to a_test0b and normally output ${advenced_test_8}"
-		[ -f ${EXEC}/diff/diff_advenced_test_8 ] && cat -e ${EXEC}/diff/diff_advenced_test_8
+		[[ -f ${EXEC}/diff/diff_advenced_test_8 ]] && cat -e ${EXEC}/diff/diff_advenced_test_8
 		echo -e "${BOLD}9)${NORMAL}: run a_test1.c just test malloc and realloc with a smaller size ${advenced_test_9}"
 		echo -e "${BOLD}10)${NORMAL}: check diff with output to a_test1 and normally output ${advenced_test_10}"
-		[ -f ${EXEC}/diff/diff_advenced_test_10 ] && cat -e ${EXEC}/diff/diff_advenced_test_10
+		[[ -f ${EXEC}/diff/diff_advenced_test_10 ]] && cat -e ${EXEC}/diff/diff_advenced_test_10
 		echo -e "${BOLD}11)${NORMAL}: run a_test2.c just test malloc and realloc with a wrong ptr ${advenced_test_11}"
 		echo -e "${BOLD}12)${NORMAL}: check diff with output to a_test2 and normally output ${advenced_test_12}"
-		[ -f ${EXEC}/diff/diff_advenced_test_12 ] && cat -e ${EXEC}/diff/diff_advenced_test_12
+		[[ -f ${EXEC}/diff/diff_advenced_test_12 ]] && cat -e ${EXEC}/diff/diff_advenced_test_12
 		echo -e "${BOLD}13)${NORMAL}: run a_test3.c just test malloc and realloc with a ptr at NULL ${advenced_test_13}"
 		echo -e "${BOLD}14)${NORMAL}: check diff with output to a_test3 and normally output ${advenced_test_14}"
-		[ -f ${EXEC}/diff/diff_advenced_test_14 ] && cat -e ${EXEC}/diff/diff_advenced_test_14
+		[[ -f ${EXEC}/diff/diff_advenced_test_14 ]] && cat -e ${EXEC}/diff/diff_advenced_test_14
 		echo -e "${BOLD}15)${NORMAL}: run a_test4c.c just test malloc and realloc with a BIG size (ULONG_MAX) ${advenced_test_15}"
 		echo -e "${BOLD}16)${NORMAL}: check diff with output to a_test4 and normally output ${advenced_test_16}"
-		[ -f ${EXEC}/diff/diff_advenced_test_16 ] && cat -e ${EXEC}/diff/diff_advenced_test_16
+		[[ -f ${EXEC}/diff/diff_advenced_test_16 ]] && cat -e ${EXEC}/diff/diff_advenced_test_16
 	fi
 	echo "----------------------------------------------------"
 }

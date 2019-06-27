@@ -22,4 +22,4 @@ test_bonus
 ############ Legend #############
 #################################
 legende
-#delete_bin
+delete_bin

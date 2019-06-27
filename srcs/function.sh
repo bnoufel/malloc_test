@@ -108,28 +108,28 @@ basic_test() {
 	./run.sh ${test0} 2>&- 1>&-
 	err=$?
 	print_error ${err}
-	[ ${err} -eq 0 ] && let "i=i+1"; basic_test_1=$(print_error ${err})
+	[[ ${err} -eq 0 ]] && let "i=i+1"; basic_test_1=$(print_error ${err})
 	########################
 	######## TEST 2 ########
 	########################
 	./run.sh ${test1} 2>&- 1>&-
 	err=$?
 	print_error ${err}
-	[ ${err} -eq 0 ] && let "i=i+1"; basic_test_2=$(print_error ${err})
+	[[ ${err} -eq 0 ]] && let "i=i+1"; basic_test_2=$(print_error ${err})
 	########################
 	######## TEST 3 ########
 	########################
 	./run.sh ${test2} 2>&- 1>&-
 	err=$?
 	print_error ${err}
-	[ ${err} -eq 0 ] && let "i=i+1"; basic_test_3=$(print_error ${err})
+	[[ ${err} -eq 0 ]] && let "i=i+1"; basic_test_3=$(print_error ${err})
 	########################
 	######## TEST 4 ########
 	########################
 	res_test3=$(./run.sh ${test3} 2>&-)
 	err=$?
 	print_error ${err}
-	[ ${err} -eq 0 ] && let "i=i+1"; basic_test_4=$(print_error ${err})
+	[[ ${err} -eq 0 ]] && let "i=i+1"; basic_test_4=$(print_error ${err})
 	########################
 	######## TEST 5 ########
 	########################
@@ -148,7 +148,7 @@ basic_test() {
 	res_test3b=$(./run.sh ${test3b} 2>&-)
 	err=$?
 	print_error ${err}
-	[ ${err} -eq 0 ] && let "i=i+1"; basic_test_6=$(print_error ${err})
+	[[ ${err} -eq 0 ]] && let "i=i+1"; basic_test_6=$(print_error ${err})
 	########################
 	######## TEST 7 ########
 	########################
@@ -167,7 +167,7 @@ basic_test() {
 	res_test4=$(./run.sh ${test4} 2>&-)
 	err=$?
 	print_error ${err}
-	[ ${err} -eq 0 ] && let "i=i+1"; basic_test_8=$(print_error ${err})
+	[[ ${err} -eq 0 ]] && let "i=i+1"; basic_test_8=$(print_error ${err})
 	########################
 	######## TEST 9 ########
 	########################
@@ -186,7 +186,7 @@ basic_test() {
 	./run.sh ${test5} 2>&- 1>&-
 	err=$?
 	print_error ${err}
-	[ ${err} -eq 0 ] && let "i=i+1"; basic_test_10=$(print_error ${err})
+	[[ ${err} -eq 0 ]] && let "i=i+1"; basic_test_10=$(print_error ${err})
 	print_result ${i} 10
 }
 
@@ -253,35 +253,35 @@ advenced_test() {
 	./run.sh ls 2>&- 1>&-
 	err=$?
 	print_error ${err}
-	[ ${err} -eq 0 ] && let "i=i+1"; advenced_test_1=$(print_error ${err})
+	[[ ${err} -eq 0 ]] && let "i=i+1"; advenced_test_1=$(print_error ${err})
 	########################
 	######## TEST 2 ########
 	########################
 	./run.sh ls -l 2>&- 1>&-
 	err=$?
 	print_error ${err}
-	[ ${err} -eq 0 ] && let "i=i+1"; advenced_test_2=$(print_error ${err})
+	[[ ${err} -eq 0 ]] && let "i=i+1"; advenced_test_2=$(print_error ${err})
 	########################
 	######## TEST 3 ########
 	########################
 	./run.sh ls -G 2>&- 1>&-
 	err=$?
 	print_error ${err}
-	[ ${err} -eq 0 ] && let "i=i+1";advenced_test_3=$(print_error ${err})
+	[[ ${err} -eq 0 ]] && let "i=i+1";advenced_test_3=$(print_error ${err})
 	########################
 	######## TEST 4 ########
 	########################
 	./run.sh ls -lG 2>&- 1>&-
 	err=$?
 	print_error ${err}
-	[ ${err} -eq 0 ] && let "i=i+1"; advenced_test_4=$(print_error ${err})
+	[[ ${err} -eq 0 ]] && let "i=i+1"; advenced_test_4=$(print_error ${err})
 	########################
 	######## TEST 5 ########
 	########################
 	res_atest0=$(./run.sh ${a_test0} 2>&-)
 	err=$?
 	print_error ${err}
-	[ ${err} -eq 0 ] && let "i=i+1"; advenced_test_5=$(print_error ${err})
+	[[ ${err} -eq 0 ]] && let "i=i+1"; advenced_test_5=$(print_error ${err})
 	########################
 	######## TEST 6 ########
 	########################
@@ -300,7 +300,7 @@ advenced_test() {
 	res_atest0b=$(./run.sh ${a_test0b} 2>&-)
 	err=$?
 	print_error ${err}
-	[ ${err} -eq 0 ] && let "i=i+1"; advenced_test_7=$(print_error ${err})
+	[[ ${err} -eq 0 ]] && let "i=i+1"; advenced_test_7=$(print_error ${err})
 	########################
 	######## TEST 8 ########
 	########################
@@ -320,7 +320,7 @@ advenced_test() {
 	res_atest1=$(./run.sh ${a_test1} 2>&-)
 	err=$?
 	print_error ${err}
-	[ ${err} -eq 0 ] && let "i=i+1"; advenced_test_9=$(print_error ${err})
+	[[ ${err} -eq 0 ]] && let "i=i+1"; advenced_test_9=$(print_error ${err})
 	########################
 	######## TEST 10 #######
 	########################
@@ -340,7 +340,7 @@ advenced_test() {
 	res_atest2=$(./run.sh ${a_test2} 2>&-)
 	err=$?
 	print_error ${err}
-	[ ${err} -eq 0 ] && let "i=i+1"; advenced_test_11=$(print_error ${err})
+	[[ ${err} -eq 0 ]] && let "i=i+1"; advenced_test_11=$(print_error ${err})
 	########################
 	######## TEST 12 #######
 	########################
@@ -359,7 +359,7 @@ advenced_test() {
 	res_atest3=$(./run.sh ${a_test3} 2>&-)
 	err=$?
 	print_error ${err}
-	[ ${err} -eq 0 ] && let "i=i+1"; advenced_test_13=$(print_error ${err})
+	[[ ${err} -eq 0 ]] && let "i=i+1"; advenced_test_13=$(print_error ${err})
 	########################
 	######## TEST 14 #######
 	########################
@@ -378,7 +378,7 @@ advenced_test() {
 	res_atest4=$(./run.sh ${a_test4} 2>&-)
 	err=$?
 	print_error ${err}
-	[ ${err} -eq 0 ] && let "i=i+1"; advenced_test_15=$(print_error ${err})
+	[[ ${err} -eq 0 ]] && let "i=i+1"; advenced_test_15=$(print_error ${err})
 	########################
 	######## TEST 16 #######
 	########################
