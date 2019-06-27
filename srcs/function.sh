@@ -25,7 +25,9 @@ print_result() {
 		echo -e "${BOLD}Result${NORMAL}: ${RED}$1/$2${NORMAL}"
 	fi
 }
-
+#################################
+######### Compile tests #########
+#################################
 compile_test() {
 	delete_bin
 	gcc ${test0}.c -o ${test0}
@@ -41,6 +43,15 @@ compile_test() {
 	gcc ${a_test2}.c -o ${a_test2}
 	gcc ${a_test3}.c -o ${a_test3}
 	gcc ${a_test4}.c -o ${a_test4}
+}
+#################################
+############ Copy Lib ###########
+#################################
+copy_lib() {
+	make -C ${MALLOC} >> ${LOGS}
+	cp ${MALLOC}/${SHORTNAME} .
+	cp ${MALLOC}/${NAME} .
+	make fclean -C ${MALLOC}  >> ${LOGS}
 }
 
 page_reclaims(){
@@ -275,7 +286,7 @@ advenced_test() {
 }
 
 bonus_test() {
-	if [[ -n $(grep "calloc" ${MALLOC}/**/*.c) ]]; then
+	if [[ -n $(grep "calloc" ${MALLOC}/**/*.c 2> /dev/null) ]] || [[ -n $(grep "calloc" ${MALLOC}/*.c 2> /dev/null) ]]; then
 		echo -en "${BOLD}calloc: ${NORMAL}"
 		test_is_ok
 		echo
@@ -284,7 +295,7 @@ bonus_test() {
 		test_is_ko
 		echo
 	fi
-	if [[ -n $(grep "reallocf" ${MALLOC}/**/*.c) ]]; then
+	if [[ -n $(grep "reallocf" ${MALLOC}/**/*.c 2> /dev/null) ]] || [[ -n $(grep "reallocf" ${MALLOC}/*.c 2> /dev/null) ]]; then
 		echo -en "${BOLD}reallocf: ${NORMAL}"
 		test_is_ok
 		echo
@@ -294,7 +305,7 @@ bonus_test() {
 		echo
 	fi
 	echo -en "${BOLD}Thread safe: ${NORMAL}"
-	if [[ -n $(grep "pthread_mutex_lock" ${MALLOC}/**/*.c) ]]; then
+	if [[ -n $(grep "pthread_" ${MALLOC}/**/*.c) ]] || [[ -n $(grep "pthread_" ${MALLOC}/*.c) ]]; then
 		echo -n "This test may be long.... "
 		../run.sh gcc ${test0}.c -o bonjour 2>&- 1>&-
 		print_error $?
