@@ -101,45 +101,88 @@ test_is_ko() {
 
 basic_test() {
 	i=0
+	########################
+	######## TEST 1 ########
+	########################
 	./run.sh ${test0} 2>&- 1>&-
-	print_error $?
-	[ $? -eq 0 ] && let "i=i+1"
+	err=$?
+	print_error ${err}
+	[ ${err} -eq 0 ] && let "i=i+1"; basic_test_1=$(print_error ${err})
+	########################
+	######## TEST 2 ########
+	########################
 	./run.sh ${test1} 2>&- 1>&-
-	print_error $?
-	[ $? -eq 0 ] && let "i=i+1"
+	err=$?
+	print_error ${err}
+	[ ${err} -eq 0 ] && let "i=i+1"; basic_test_2=$(print_error ${err})
+	########################
+	######## TEST 3 ########
+	########################
 	./run.sh ${test2} 2>&- 1>&-
-	print_error $?
-	[ $? -eq 0 ] && let "i=i+1"
+	err=$?
+	print_error ${err}
+	[ ${err} -eq 0 ] && let "i=i+1"; basic_test_3=$(print_error ${err})
+	########################
+	######## TEST 4 ########
+	########################
 	res_test3=$(./run.sh ${test3} 2>&-)
-	print_error $?
-	[ $? -eq 0 ] && let "i=i+1"
+	err=$?
+	print_error ${err}
+	[ ${err} -eq 0 ] && let "i=i+1"; basic_test_4=$(print_error ${err})
+	########################
+	######## TEST 5 ########
+	########################
 	if [[ -n $(diff <(echo ${res_test3}) <(./${test3})) ]]; then
 		test_is_ok
 		let "i=i+1"
+		basic_test_5=${GOOD}
 	else
 		test_is_ko
+		basic_test_5=${WRONG}
 	fi
+	########################
+	######## TEST 6 ########
+	########################
 	res_test3b=$(./run.sh ${test3b} 2>&-)
-	print_error $?
-	[ $? -eq 0 ] && let "i=i+1"
+	err=$?
+	print_error ${err}
+	[ ${err} -eq 0 ] && let "i=i+1"; basic_test_6=$(print_error ${err})
+	########################
+	######## TEST 7 ########
+	########################
 	if [[ -n $(diff <(echo ${res_test3b}) <(./${test3b})) ]]; then
 		test_is_ok
 		let "i=i+1"
+		basic_test_7=${GOOD}
 	else
 		test_is_ko
+		basic_test_7=${WRONG}
 	fi
+	########################
+	######## TEST 8 ########
+	########################
 	res_test4=$(./run.sh ${test4} 2>&-)
-	print_error $?
-	[ $? -eq 0 ] && let "i=i+1"
+	err=$?
+	print_error ${err}
+	[ ${err} -eq 0 ] && let "i=i+1"; basic_test_8=$(print_error ${err})
+	########################
+	######## TEST 9 ########
+	########################
 	if [[ -n "$(diff <(echo ${res_test4}) <(echo -e "Bonjour\n"))" ]]; then
 		test_is_ok
 		let "i=i+1"
+		basic_test_9=${GOOD}
 	else
 		test_is_ko
+		basic_test_9=${WRONG}
 	fi
+	########################
+	######## TEST 10 #######
+	########################
 	./run.sh ${test5} 2>&- 1>&-
-	print_error $?
-	[ $? -eq 0 ] && let "i=i+1"
+	err=$?
+	print_error ${err}
+	[ ${err} -eq 0 ] && let "i=i+1"; basic_test_10=$(print_error ${err})
 	print_result ${i} 10
 }
 
@@ -206,81 +249,143 @@ check_free() {
 
 advenced_test() {
 	i=0
+	########################
+	######## TEST 1 ########
+	########################
 	./run.sh ls 2>&- 1>&-
 	err=$?
 	print_error ${err}
-	[ ${err} -eq 0 ] && let "i=i+1"
+	[ ${err} -eq 0 ] && let "i=i+1"; advenced_test_1=$(print_error ${err})
+	########################
+	######## TEST 2 ########
+	########################
 	./run.sh ls -l 2>&- 1>&-
 	err=$?
 	print_error ${err}
-	[ ${err} -eq 0 ] && let "i=i+1"
+	[ ${err} -eq 0 ] && let "i=i+1"; advenced_test_2=$(print_error ${err})
+	########################
+	######## TEST 3 ########
+	########################
 	./run.sh ls -G 2>&- 1>&-
 	err=$?
-	print_error $?
-	[ ${err} -eq 0 ] && let "i=i+1"
+	print_error ${err}
+	[ ${err} -eq 0 ] && let "i=i+1";advenced_test_3=$(print_error ${err})
+	########################
+	######## TEST 4 ########
+	########################
 	./run.sh ls -lG 2>&- 1>&-
 	err=$?
-	print_error $?
-	[ ${err} -eq 0 ] && let "i=i+1"
+	print_error ${err}
+	[ ${err} -eq 0 ] && let "i=i+1"; advenced_test_4=$(print_error ${err})
+	########################
+	######## TEST 5 ########
+	########################
 	res_atest0=$(./run.sh ${a_test0} 2>&-)
 	err=$?
 	print_error ${err}
-	[ ${err} -eq 0 ] && let "i=i+1"
-	if [[ -z $(diff <(echo ${res_atest0}) <(echo -e "Malloc OK\nRealloc OK")) ]]; then
+	[ ${err} -eq 0 ] && let "i=i+1"; advenced_test_5=$(print_error ${err})
+	########################
+	######## TEST 6 ########
+	########################
+	if [[ -z $(diff -w <(echo ${res_atest0}) <(echo -e "Malloc OK Realloc OK")) ]]; then
 		test_is_ok
 		let "i=i+1"
+		advenced_test_6=${GOOD}
 	else
 		test_is_ko
+		advenced_test_6=${WRONG}
 	fi
+	########################
+	######## TEST 7 ########
+	########################
 	res_atest0b=$(./run.sh ${a_test0b} 2>&-)
 	err=$?
 	print_error ${err}
-	[ ${err} -eq 0 ] && let "i=i+1"
-	if [[ -z $(diff <(echo ${res_atest0b}) <(echo -e "Malloc OK\nRealloc OK")) ]]; then
+	[ ${err} -eq 0 ] && let "i=i+1"; advenced_test_7=$(print_error ${err})
+	########################
+	######## TEST 8 ########
+	########################
+	if [[ -z $(diff -w <(echo ${res_atest0b}) <(echo -e "Malloc OK Realloc OK")) ]]; then
 		test_is_ok
 		let "i=i+1"
+		advenced_test_8=${GOOD}
 	else
 		test_is_ko
+		advenced_test_8=${WRONG}
+		diff -w <(echo ${res_atest0b}) <(echo -e "Malloc OK Realloc OK") > ${EXEC}/diff/diff_advenced_test_8
 	fi
+	########################
+	######## TEST 9 ########
+	########################
 	res_atest1=$(./run.sh ${a_test1} 2>&-)
 	err=$?
 	print_error ${err}
-	[ ${err} -eq 0 ] && let "i=i+1"
-	if [[ -z $(diff <(echo ${res_atest1}) <(echo -e "Malloc OK\nRealloc OK")) ]]; then
+	[ ${err} -eq 0 ] && let "i=i+1"; advenced_test_9=$(print_error ${err})
+	########################
+	######## TEST 10 #######
+	########################
+	if [[ -z $(diff -w <(echo ${res_atest1}) <(echo -e "Malloc OK Realloc OK")) ]]; then
 		test_is_ok
 		let "i=i+1"
+		advenced_test_10=${GOOD}
 	else
 		test_is_ko
+		advenced_test_10=${WRONG}
+		diff <(echo ${res_atest1}) <(echo -e "Malloc OK Realloc OK") > ${EXEC}/diff/diff_advenced_test_10
 	fi
+	########################
+	######## TEST 11 #######
+	########################
 	res_atest2=$(./run.sh ${a_test2} 2>&-)
 	err=$?
 	print_error ${err}
-	[ ${err} -eq 0 ] && let "i=i+1"
+	[ ${err} -eq 0 ] && let "i=i+1"; advenced_test_11=$(print_error ${err})
+	########################
+	######## TEST 12 #######
+	########################
 	if [[ -z $(diff <(echo ${res_atest2}) <(echo -e "Malloc OK")) ]]; then
 		test_is_ok
 		let "i=i+1"
+		advenced_test_12=${GOOD}
 	else
 		test_is_ko
+		advenced_test_12=${WRONG}
 	fi
+	########################
+	######## TEST 13 #######
+	########################
 	res_atest3=$(./run.sh ${a_test3} 2>&-)
 	err=$?
 	print_error ${err}
-	[ ${err} -eq 0 ] && let "i=i+1"
-	if [[ -z $(diff <(echo ${res_atest3}) <(echo -e "Malloc OK\nRealloc OK")) ]]; then
+	[ ${err} -eq 0 ] && let "i=i+1"; advenced_test_13=$(print_error ${err})
+	########################
+	######## TEST 14 #######
+	########################
+	if [[ -z $(diff -w <(echo ${res_atest3}) <(echo -e "Malloc OK Realloc OK")) ]]; then
 		test_is_ok
 		let "i=i+1"
+		advenced_test_14=${GOOD}
 	else
 		test_is_ko
+		advenced_test_14=${WRONG}
 	fi
+	########################
+	######## TEST 15 #######
+	########################
 	res_atest4=$(./run.sh ${a_test4} 2>&-)
 	err=$?
 	print_error ${err}
-	[ ${err} -eq 0 ] && let "i=i+1"
-	if [[ -z $(diff <(echo ${res_atest4}) <(echo -e "Malloc OK")) ]]; then
+	[ ${err} -eq 0 ] && let "i=i+1"; advenced_test_15=$(print_error ${err})
+	########################
+	######## TEST 16 #######
+	########################
+	if [[ -z $(diff -w <(echo ${res_atest4}) <(echo -e "Malloc OK")) ]] || [[ -z $(diff -w <(echo ${res_atest4}) <(echo -e "Malloc OK Realloc OK")) ]]; then
 		test_is_ok
 		let "i=i+1"
+		advenced_test_16=${GOOD}
 	else
 		test_is_ko
+		advenced_test_16=${WRONG}
 	fi
 	print_result ${i} 16
 }

@@ -61,16 +61,16 @@ test_basic() {
 	echo -e -n ${BOLD}Basic test: ${NORMAL}
 	basic_test
 	if [[ ${arg} == "--debug" ]]; then
-		echo -e "${BOLD}1)${NORMAL}: test0.c of the correction"
-		echo -e "${BOLD}2)${NORMAL}: test1.c of the correction"
-		echo -e "${BOLD}3)${NORMAL}: test2.c of the correction"
-		echo -e "${BOLD}4)${NORMAL}: test3.c of the correction"
-		echo -e "${BOLD}5)${NORMAL}: Check diff if output is good for test3.c"
-		echo -e "${BOLD}6)${NORMAL}: test3++.c of the correction"
-		echo -e "${BOLD}7)${NORMAL}: Check diff if output is good for test3++.c"
-		echo -e "${BOLD}8)${NORMAL}: test4.c of the correction"
-		echo -e "${BOLD}9)${NORMAL}: Check diff if output is good for test4.c"
-		echo -e "${BOLD}10)${NORMAL}: test5.c of the correction"
+		echo -e "${BOLD}1)${NORMAL}: test0.c of the correction ${basic_test_1}"
+		echo -e "${BOLD}2)${NORMAL}: test1.c of the correction ${basic_test_2}"
+		echo -e "${BOLD}3)${NORMAL}: test2.c of the correction ${basic_test_3}"
+		echo -e "${BOLD}4)${NORMAL}: test3.c of the correction ${basic_test_4}"
+		echo -e "${BOLD}5)${NORMAL}: Check diff if output is good for test3.c ${basic_test_5}"
+		echo -e "${BOLD}6)${NORMAL}: test3++.c of the correction ${basic_test_6}"
+		echo -e "${BOLD}7)${NORMAL}: Check diff if output is good for test3++.c ${basic_test_7}"
+		echo -e "${BOLD}8)${NORMAL}: test4.c of the correction ${basic_test_8}"
+		echo -e "${BOLD}9)${NORMAL}: Check diff if output is good for test4.c ${basic_test_9}"
+		echo -e "${BOLD}10)${NORMAL}: test5.c of the correction ${basic_test_10}"
 	fi
 	echo -e "----------------------------------------------------"
 	echo -e -n ${BOLD}Check page: ${NORMAL}
@@ -104,16 +104,24 @@ test_advence () {
 	echo -en ${BOLD}Advanced test: ${NORMAL}
 	advenced_test
 	if [[ ${arg} == "--debug" ]]; then
-		echo -e "${BOLD}1)${NORMAL}: ls"
-		echo -e "${BOLD}2)${NORMAL}: ls -l"
-		echo -e "${BOLD}3)${NORMAL}: ls -G"
-		echo -e "${BOLD}4)${NORMAL}: ls -lG"
-		echo -e "${BOLD}5)${NORMAL}: a_test0.c of the correction"
-		echo -e "${BOLD}6)${NORMAL}: a_test0b.c of the correction"
-		echo -e "${BOLD}7)${NORMAL}: a_test1.c of the correction"
-		echo -e "${BOLD}8)${NORMAL}: a_test2.c of the correction"
-		echo -e "${BOLD}9)${NORMAL}: a_test3.c of the correction"
-		echo -e "${BOLD}10)${NORMAL}: a_test4.c of the correction"
+		echo -e "${BOLD}1)${NORMAL}: ls ${advenced_test_1}"
+		echo -e "${BOLD}2)${NORMAL}: ls -l ${advenced_test_2}"
+		echo -e "${BOLD}3)${NORMAL}: ls -G ${advenced_test_3}"
+		echo -e "${BOLD}4)${NORMAL}: ls -lG ${advenced_test_4}"
+		echo -e "${BOLD}5)${NORMAL}: run a_test0.c just test a basic realloc ${advenced_test_5}"
+		echo -e "${BOLD}6)${NORMAL}: check diff with output to a_test0 and normally output ${advenced_test_6}"
+		echo -e "${BOLD}7)${NORMAL}: run a_test0b.c just test malloc and realloc with size = 0 ${advenced_test_7}"
+		echo -e "${BOLD}8)${NORMAL}: check diff with output to a_test0b and normally output ${advenced_test_8}"
+		[ -f ${EXEC}/diff/diff_advenced_test_8 ] && cat -e ${EXEC}/diff/diff_advenced_test_8
+		echo -e "${BOLD}9)${NORMAL}: run a_test1.c just test malloc and realloc with a smaller size ${advenced_test_9}"
+		echo -e "${BOLD}10)${NORMAL}: check diff with output to a_test1 and normally output ${advenced_test_10}"
+		[ -f ${EXEC}/diff/diff_advenced_test_10 ] && cat -e ${EXEC}/diff/diff_advenced_test_10
+		echo -e "${BOLD}11)${NORMAL}: run a_test2.c just test malloc and realloc with a wrong ptr ${advenced_test_11}"
+		echo -e "${BOLD}12)${NORMAL}: check diff with output to a_test2 and normally output ${advenced_test_12}"
+		echo -e "${BOLD}13)${NORMAL}: run a_test3.c just test malloc and realloc with a ptr at NULL ${advenced_test_13}"
+		echo -e "${BOLD}14)${NORMAL}: check diff with output to a_test3 and normally output ${advenced_test_14}"
+		echo -e "${BOLD}15)${NORMAL}: run a_test4c.c just test malloc and realloc with a BIG size (ULONG_MAX) ${advenced_test_15}"
+		echo -e "${BOLD}16)${NORMAL}: check diff with output to a_test4 and normally output ${advenced_test_16}"
 	fi
 	echo "----------------------------------------------------"
 }

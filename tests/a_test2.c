@@ -6,7 +6,7 @@ int main()
 {
 	char *str, *ptr;
 	if (!(str = malloc(10)))
-		exit (128);
+		return 0;
 	printf("Malloc OK\n");
 	if (!(ptr = realloc("wiwiwiwi", 12)))
 		return 0;
