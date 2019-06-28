@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 source srcs/include.sh
-init
 parse_args $@
+init
 run_with_arg
 run

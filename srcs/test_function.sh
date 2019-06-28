@@ -6,6 +6,7 @@ test_author() {
 	echo -e -n "${BOLD}Author file: "
 	if [[ -f ${MALLOC}/auteur ]] && [[ -z $(diff -w <(cat ${MALLOC}/auteur) <(echo "${LOGNAME}")) ]]; then
 			test_is_ok
+			echo
 	elif [[ -f ${MALLOC}/author ]] && [[ -z $(diff -w <(cat ${MALLOC}/author) <(echo "${LOGNAME}")) ]];then
 			test_is_ok
 	else
@@ -67,7 +68,7 @@ test_makefile() {
 	if [[ ${debug} == "true" ]]; then
 		echo -e "${BOLD}1)${NORMAL}: Test ${NAME} rules ${makefile_1}"
 		echo -e "${BOLD}2)${NORMAL}: Test fclean rules ${makefile_2}"
-		echo -e "${BOLD}3)${NORMAL}: Test HOSTTYPE ${makefile_3}"
+		echo -e "${BOLD}3)${NORMAL}: Test HOSTTYPE ${makefile_3}\n"
 	fi
 }
 
@@ -138,7 +139,7 @@ test_basic() {
 			fi
 		done
 	fi
-	echo -e "----------------------------------------------------"
+	echo -e "----------------------------------------------------\n"
 }
 
 #################################
@@ -170,7 +171,7 @@ test_advanced () {
 		echo -e "${BOLD}16)${NORMAL}: check diff with output to a_test4 and normally output ${advanced_test_16}"
 		[[ -f ${EXEC}/diff/diff_advanced_test_16 ]] && cat -e ${EXEC}/diff/diff_advanced_test_16
 	fi
-	echo "----------------------------------------------------"
+	echo "----------------------------------------------------\n"
 }
 
 #################################
@@ -179,7 +180,7 @@ test_advanced () {
 test_bonus() {
 	echo -e ${BOLD}Bonus test: ${NORMAL}
 	bonus_test
-	echo "----------------------------------------------------"
+	echo "----------------------------------------------------\n"
 }
 
 

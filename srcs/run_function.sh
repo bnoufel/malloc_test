@@ -1,4 +1,14 @@
 #!/bin/bash
+help() {
+	echo "--debug: Permet d'afficher les options de debuggages (erreurs / diff etc.)"
+	echo "--all: Permet de faire un tests complet."
+	echo "--author: Permet de tester le fichier auteur/author"
+	echo "--makefile: Permet de tester le Makefile"
+	echo "--basic: Permet de réaliser des tests basiques"
+	echo "--advance: Permet de réaliser des tests avancés"
+	echo "--bonus: Permet de réaliser des tests bonus"
+}
+
 init() {
 	#################################
 	######## Remove Log File ########
@@ -30,24 +40,24 @@ parse_args() {
 			help="true"
 		else
 			echo -e "${BOLD}${RED}Unknown arg: ${YELLOW}${args}${NORMAL}"
-			${EXEC}/./test.sh --help
+			help
 			echo -e "${BOLD}${YELLOW}Bye!${NORMAL}";
 			exit;
 		fi
 	done
 }
+noarg=false
+if [[ $# -eq 0 ]] || ([[ $# -eq 1 ]] && [[ $1 == "--debug" ]]); then
+	noarg=true
+fi
 run_with_arg() {
 	while true
 	do
 		if [[ ${help} == "true" ]]; then
-			echo "--debug: Permet d'afficher les options de debuggages (erreurs / diff etc.)"
-			echo "--all: Permet de faire un tests complet."
-			echo "--author: Permet de tester le fichier auteur/author"
-			echo "--makefile: Permet de tester le Makefile"
-			echo "--basic: Permet de réaliser des tests basiques"
-			echo "--advance: Permet de réaliser des tests avancés"
-			echo "--bonus: Permet de réaliser des tests bonus"
+			help;
 			exit;
+		elif [[ ${noarg} == "true" ]]; then
+			break;
 		elif [[ ${all} == "true" ]]; then
 			test_all;
 			all=false
@@ -66,25 +76,23 @@ run_with_arg() {
 		elif [[ ${bonus} == "true" ]]; then
 			test_bonus;
 			bonus=false
-		elif [[ ${debug} == "true" ]]; then
-			test_all;
-			debug=false
 		else
-			echo -e "${BOLD}${YELLOW}Bye!${NORMAL}";
+			echo -e "${BOLD}${YELLOW}Bye!${NORMAL}"
 			exit;
 		fi
 	done
 }
+
 run() {
-	echo -e "${BOLD}What would you like to test.${NORMAL}"
-	echo "1) Test author file."
-	echo "2) Test makefile."
-	echo "3) Basic test."
-	echo "4) Advenced test."
-	echo "5) Bonus test."
-	echo "6) All."
-	echo "9) Exit."
 	while true; do
+		echo -e "${BOLD}What would you like to test.${NORMAL}"
+		echo "1) Test author file."
+		echo "2) Test makefile."
+		echo "3) Basic test."
+		echo "4) Advenced test."
+		echo "5) Bonus test."
+		echo "6) All."
+		echo "9) Exit."
 		echo -n "Your choice: "
 		read choice
 		echo
