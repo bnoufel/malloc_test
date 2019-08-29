@@ -77,8 +77,7 @@ run_with_arg() {
 			test_bonus;
 			bonus=false
 		else
-			echo -e "${BOLD}${YELLOW}Bye!${NORMAL}"
-			exit;
+			run;
 		fi
 	done
 }
