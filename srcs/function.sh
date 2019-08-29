@@ -44,6 +44,7 @@ compile_test() {
 	gcc ${a_test2}.c -o ${a_test2}
 	gcc ${a_test3}.c -o ${a_test3}
 	gcc ${a_test4}.c -o ${a_test4}
+	gcc ${align}.c -o ${align}
 }
 #################################
 ############ Copy Lib ###########
@@ -414,6 +415,15 @@ bonus_test() {
 		echo
 	else
 		echo -en "${BOLD}reallocf: ${NORMAL}"
+		test_is_ko
+		echo
+	fi
+	echo -en "${BOLD}Align to 16octet: ${NORMAL}"
+	is_align=$(./run.sh ./tests/align)
+	if [[ $(diff -U1 <(echo -n ${is_align}) <(echo -n 0)) ]]; then
+		test_is_ok
+		echo
+	else
 		test_is_ko
 		echo
 	fi

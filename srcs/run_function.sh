@@ -70,8 +70,7 @@ run_with_arg() {
 			test_all;
 			debug=false
 		else
-			echo -e "${BOLD}${YELLOW}Bye!${NORMAL}";
-			exit;
+			run;
 		fi
 	done
 }
