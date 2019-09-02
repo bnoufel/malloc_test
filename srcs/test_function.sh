@@ -171,7 +171,7 @@ test_advanced () {
 		echo -e "${BOLD}16)${NORMAL}: check diff with output to a_test4 and normally output ${advanced_test_16}"
 		[[ -f ${EXEC}/diff/diff_advanced_test_16 ]] && cat -e ${EXEC}/diff/diff_advanced_test_16
 	fi
-	echo "----------------------------------------------------\n"
+	echo -e "----------------------------------------------------\n"
 }
 
 #################################
@@ -180,7 +180,7 @@ test_advanced () {
 test_bonus() {
 	echo -e ${BOLD}Bonus test: ${NORMAL}
 	bonus_test
-	echo "----------------------------------------------------\n"
+	echo -e "----------------------------------------------------\n"
 }
 
 
