@@ -23,7 +23,7 @@ test_author() {
 		fi
 	fi
 	if [[ ${debug} == "true" ]]; then
-		echo -e "----------------------------------------------------"
+		echo -e "\n----------------------------------------------------"
 	else
 		echo -e "\n----------------------------------------------------"
 	fi
@@ -167,9 +167,12 @@ test_advanced () {
 		echo -e "${BOLD}13)${NORMAL}: run a_test3.c just test malloc and realloc with a ptr at NULL ${advanced_test_13}"
 		echo -e "${BOLD}14)${NORMAL}: check diff with output to a_test3 and normally output ${advanced_test_14}"
 		[[ -f ${EXEC}/diff/diff_advanced_test_14 ]] && cat -e ${EXEC}/diff/diff_advanced_test_14
-		echo -e "${BOLD}15)${NORMAL}: run a_test4c.c just test malloc and realloc with a BIG size (ULONG_MAX) ${advanced_test_15}"
+		echo -e "${BOLD}15)${NORMAL}: run a_test4c.c just test malloc and realloc with a BIG size or 0 -13 (ULONG_MAX) ${advanced_test_15}"
 		echo -e "${BOLD}16)${NORMAL}: check diff with output to a_test4 and normally output ${advanced_test_16}"
 		[[ -f ${EXEC}/diff/diff_advanced_test_16 ]] && cat -e ${EXEC}/diff/diff_advanced_test_16
+		echo -e "${BOLD}17)${NORMAL}: run a_test4c.c just test malloc and realloc with a BIG size -17 (ULONG_MAX) ${advanced_test_16}"
+		echo -e "${BOLD}18)${NORMAL}: check diff with output to a_test4 and normally output ${advanced_test_16}"
+		[[ -f ${EXEC}/diff/diff_advanced_test_18 ]] && cat -e ${EXEC}/diff/diff_advanced_test_18
 	fi
 	echo -e "----------------------------------------------------\n"
 }

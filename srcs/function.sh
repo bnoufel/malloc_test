@@ -44,6 +44,7 @@ compile_test() {
 	gcc ${a_test2}.c -o ${a_test2}
 	gcc ${a_test3}.c -o ${a_test3}
 	gcc ${a_test4}.c -o ${a_test4}
+	gcc ${a_test5}.c -o ${a_test5}
 	gcc ${align}.c -o ${align}
 }
 #################################
@@ -396,7 +397,30 @@ advanced_test() {
 			diff -U3 -w <(echo ${res_atest4}) <(echo -e "Malloc OK") > ${EXEC}/diff/diff_advanced_test_16
 		fi
 	fi
-	print_result ${i} 16
+	########################
+	######## TEST 17 #######
+	########################
+	res_atest5=$(./run.sh ${a_test5} 2>&-)
+	err=$?
+	print_error ${err}
+	[[ ${err} -eq 0 ]] && let "i=i+1"; advanced_test_15=$(print_error ${err})
+	########################
+	######## TEST 18 #######
+	########################
+	if [[ -z $(diff -U3 -w <(echo ${res_atest5}) <(echo -e "Malloc OK")) ]] || [[ -z $(diff -U3 -w <(echo ${res_atest5}) <(echo -e "Malloc OK Realloc OK")) ]]; then
+		test_is_ok
+		let "i=i+1"
+		advanced_test_16=${GOOD}
+	else
+		test_is_ko
+		advanced_test_16=${WRONG}
+		if [[ -z $(diff -U3 -w <(echo ${res_atest4}) <(echo -e "Malloc OK Realloc OK")) ]]; then
+			diff -U3 -w <(echo ${res_atest4}) <(echo -e "Malloc OK Realloc OK") > ${EXEC}/diff/diff_advanced_test_18
+		elif [[ -z $(diff -U3 -w <(echo ${res_atest4}) <(echo -e "Malloc OK")) ]]; then
+			diff -U3 -w <(echo ${res_atest4}) <(echo -e "Malloc OK") > ${EXEC}/diff/diff_advanced_test_18
+		fi
+	fi
+	print_result ${i} 18
 }
 
 bonus_test() {

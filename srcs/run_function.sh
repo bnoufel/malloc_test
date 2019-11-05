@@ -5,7 +5,7 @@ help() {
 	echo "--author: Permet de tester le fichier auteur/author"
 	echo "--makefile: Permet de tester le Makefile"
 	echo "--basic: Permet de réaliser des tests basiques"
-	echo "--advance: Permet de réaliser des tests avancés"
+	echo "--advanced: Permet de réaliser des tests avancés"
 	echo "--bonus: Permet de réaliser des tests bonus"
 }
 
@@ -61,6 +61,8 @@ run_with_arg() {
 		elif [[ ${all} == "true" ]]; then
 			test_all;
 			all=false
+			echo -e "${BOLD}${YELLOW}Bye!${NORMAL}"
+			exit;
 		elif [[ ${author} == "true" ]]; then
 			test_author;
 			author=false
